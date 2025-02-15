@@ -1,0 +1,36 @@
+---
+- name: Pull Gitea Docker Image
+  community.docker.docker_image:
+    name: gitea/gitea:nightly
+    source: pull
+
+- name: Ensure Gitea Data Directory Exists
+  ansible.builtin.file:
+    path: /srv/gitea
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+  become: true
+
+- name: Start Gitea Container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    image: gitea/gitea:nightly
+    ports:
+      - "3000:3000"
+      - "2222:22"
+    volumes:
+      - "{{ gitea_data_path }}:/data"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    env:
+      USER_UID: "1000"
+      USER_GID: "1000"
+      GITEA__database__DB_TYPE: "postgres"
+      GITEA__database__HOST: "{{ postgres_host_ip }}"
+      GITEA__database__NAME: "{{ database }}"
+      GITEA__database__USER: "{{ database_user }}"
+      GITEA__database__PASSWD: "{{ database_pwd }}"
+    state: started
+    restart_policy: always

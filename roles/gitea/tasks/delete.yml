@@ -1,0 +1,19 @@
+---
+- name: Stop container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    state: stopped
+  tags:
+    - reset
+
+- name: Delete container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    state: absent
+  tags:
+    - reset
+
+- name: Launch new container
+  ansible.builtin.include_tasks: setup.yml
+  tags:
+    - reset

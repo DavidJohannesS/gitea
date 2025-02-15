@@ -1,0 +1,12 @@
+---
+# vars file for gitea
+
+container_name: "gitea"
+gitea_data_path: "/srv/gitea"
+
+
+postgres_host_ip: "192.168.0.7:5432"
+ansible_user: "david"
+database: "postgres"
+database_user: "gitea"
+database_pwd: "testpwd"

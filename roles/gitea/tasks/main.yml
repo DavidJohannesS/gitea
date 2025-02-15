@@ -1,0 +1,10 @@
+---
+# tasks file for gitea
+- name: Setup gitea
+  ansible.builtin.include_tasks: setup.yml
+
+- name: Reset gitea container
+  ansible.builtin.include_tasks: delete.yml
+  tags:
+    - never
+    - reset
